@@ -65,7 +65,7 @@ public class DetailActivity extends AppCompatActivity {
         tvTahun = (TextView) findViewById(R.id.tahunRilis);
         tvRating = (TextView) findViewById(R.id.voteAv);
         overview = (TextView) findViewById(R.id.overview);
-        bg = (ImageView) findViewById(R.id.imageBack);
+        imageViewDetail = (ImageView) findViewById(R.id.imageBack);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -102,12 +102,12 @@ public class DetailActivity extends AppCompatActivity {
                             tvRating.setText(o.getString("vote_average"));
                             tvTahun.setText(o.getString("release_date"));
                             overview.setText(o.getString("overview"));
-                            url = o.getJSONObject("link").getString("url");
+                            url = o.getString("backdrop_path");
 
                             Glide
                                     .with(DetailActivity.this)
-                                    .load("http://image.tmdb.org/t/p/w500" + o.getString("backdrop_path"))
-                                    .into(bg);
+                                    .load("http://image.tmdb.org/t/p/w500" + (o.getString("backdrop_path")))
+                                    .into(imageViewDetail);
 
 
                         } catch (JSONException e) {
