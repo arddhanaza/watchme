@@ -1,11 +1,6 @@
 # WATCHme
 
-# LINK
-
-
-
 # LINK APK
-
 
 # IDENTITAS
 Nama Lengkap      : Arddhana Zhafran Amanullah
