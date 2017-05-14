@@ -1,12 +1,15 @@
 package id.sch.smktelkom_mlg.privateassignment.xirpl103.watchme;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -34,7 +37,7 @@ public class MovAdapter extends RecyclerView.Adapter<MovAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         final ListItem listItem = listItems.get(position);
 
         holder.textViewJudul.setText(listItem.getJudul());
@@ -43,6 +46,17 @@ public class MovAdapter extends RecyclerView.Adapter<MovAdapter.ViewHolder> {
         Glide.with(context)
                 .load("http://image.tmdb.org/t/p/w500" + listItem.getImageUrl())
                 .into(holder.imageView);
+
+        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(context, "Detail for " + listItem.getJudul(), Toast.LENGTH_LONG).show();
+                Intent singleBlogIntent = new Intent(context, DetailActivity.class);
+                singleBlogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                singleBlogIntent.putExtra("blog_id", position);
+                context.startActivity(singleBlogIntent);
+            }
+        });
 
 
     }
@@ -59,6 +73,7 @@ public class MovAdapter extends RecyclerView.Adapter<MovAdapter.ViewHolder> {
         public TextView textViewJudul;
         public TextView textViewDesc;
         public ImageView imageView;
+        public LinearLayout linearLayout;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -66,6 +81,7 @@ public class MovAdapter extends RecyclerView.Adapter<MovAdapter.ViewHolder> {
             textViewJudul = (TextView) itemView.findViewById(R.id.textViewJudul);
             textViewDesc = (TextView) itemView.findViewById(R.id.textViewDeskripsi);
             imageView = (ImageView) itemView.findViewById(R.id.imageView);
+            linearLayout = (LinearLayout) itemView.findViewById(R.id.linearLayout);
         }
     }
 }
