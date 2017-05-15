@@ -49,4 +49,19 @@ public class SavedFragment extends Fragment {
 
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            actionView();
+        } else {
+
+        }
+    }
+
+    private void actionView() {
+        fList.clear();
+        fList.addAll(SavedItemList.listAll(SavedItemList.class));
+        adapter.notifyDataSetChanged();
+    }
 }

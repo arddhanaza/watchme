@@ -68,7 +68,7 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 doSimpan();
-                Snackbar.make(view, "SAVE", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "SAVED", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });

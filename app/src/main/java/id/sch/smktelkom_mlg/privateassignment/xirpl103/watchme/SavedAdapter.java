@@ -1,10 +1,12 @@
 package id.sch.smktelkom_mlg.privateassignment.xirpl103.watchme;
 
 import android.content.Context;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -35,8 +37,8 @@ public class SavedAdapter extends RecyclerView.Adapter<SavedAdapter.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        SavedItemList favouriteItem = fItem.get(position);
+    public void onBindViewHolder(ViewHolder holder, final int position) {
+        final SavedItemList favouriteItem = fItem.get(position);
         holder.tvJudul.setText(favouriteItem.judul);
         holder.tvOverview.setText(favouriteItem.overview);
 
@@ -47,8 +49,20 @@ public class SavedAdapter extends RecyclerView.Adapter<SavedAdapter.ViewHolder> 
                 .error(R.mipmap.ic_launcher)
                 .into(holder.imgUrl);
 
-    }
+        holder.buttonDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final SavedItemList savedItemList1 = fItem.get(position);
+                fItem.remove(position);
+                savedItemList1.delete();
+                SavedAdapter.this.notifyDataSetChanged();
 
+                Snackbar.make(view, "DELETED", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+
+    }
     @Override
     public int getItemCount() {
         return fItem.size();
@@ -61,6 +75,7 @@ public class SavedAdapter extends RecyclerView.Adapter<SavedAdapter.ViewHolder> 
         public TextView tvRating;
         public TextView tvOverview;
         public ImageView imgUrl;
+        public Button buttonDelete;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -68,6 +83,7 @@ public class SavedAdapter extends RecyclerView.Adapter<SavedAdapter.ViewHolder> 
             tvJudul = (TextView) itemView.findViewById(R.id.textViewJudul2);
             tvOverview = (TextView) itemView.findViewById(R.id.textViewDeskripsi2);
             imgUrl = (ImageView) itemView.findViewById(R.id.imageView2);
+            buttonDelete = (Button) itemView.findViewById(R.id.btDelete);
         }
     }
 }
