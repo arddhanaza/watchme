@@ -1,8 +1,7 @@
 package id.sch.smktelkom_mlg.privateassignment.xirpl103.watchme;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
-import android.net.Uri;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -24,6 +23,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 public class DetailActivity extends AppCompatActivity {
 
     private static final String URL_DATA = "https://api.themoviedb.org/3/movie/top_rated?api_key=1029a4f1003dd4d03181bb24eda5b026";
@@ -35,6 +36,12 @@ public class DetailActivity extends AppCompatActivity {
     public ImageView imageViewDetail;
     public ImageView bg;
     public String url;
+    public String urlgambar;
+    SavedItemList savedItemList;
+    boolean isPressed = true;
+    ArrayList<SavedItemList> fItem;
+    ArrayList<SavedItemList> fList;
+    SavedAdapter mAdapter;
     private Integer mPostkey = null;
 
     @Override
@@ -44,21 +51,9 @@ public class DetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
         mPostkey = getIntent().getExtras().getInt("blog_id");
         loadRecyclerViewData();
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Uri uri = Uri.parse(url);
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                startActivity(intent);
-
-                Snackbar.make(view, "SAVE", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         tvJudul = (TextView) findViewById(R.id.tvJudul);
         tvJudulAsli = (TextView) findViewById(R.id.tvJudulAsli);
@@ -66,6 +61,18 @@ public class DetailActivity extends AppCompatActivity {
         tvRating = (TextView) findViewById(R.id.voteAv);
         overview = (TextView) findViewById(R.id.overview);
         imageViewDetail = (ImageView) findViewById(R.id.imageBack);
+
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                doSimpan();
+                Snackbar.make(view, "SAVE", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -75,6 +82,25 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void doSimpan() {
+        String judul = tvJudul.getText().toString();
+        String judulasli = tvJudulAsli.getText().toString();
+        String tahun = tvTahun.getText().toString();
+        String rating = tvRating.getText().toString();
+        String overviewview = overview.getText().toString();
+        String images = url;
+
+        savedItemList = new SavedItemList(judul, judulasli, tahun, rating, overviewview, images);
+        savedItemList.save();
+        SharedPreferences.Editor editor = getSharedPreferences(judul, MODE_PRIVATE).edit();
+
+        editor.putBoolean("isNew", true);
+
+        editor.commit();
+
+    }
+
 
     private void loadRecyclerViewData() {
 
